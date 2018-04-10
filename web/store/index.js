@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import vuexSearch from 'vuex-search';
+import VuexSearch, { vuexSearchPlugin } from 'vuex-search';
 
 import * as getters from './getters';
 import actions from './actions';
 import mutations from './mutations';
 
 Vue.use(Vuex);
+Vue.use(VuexSearch);
 
 const state = {
   resources: { contacts: [] },
@@ -18,18 +19,12 @@ export default new Vuex.Store({
   mutations,
   state,
   plugins: [
-    vuexSearch({
+    vuexSearchPlugin({
       resourceIndexes: {
         contacts: ['address', 'name'],
       },
       resourceGetter: (resourceName, store) => store.resources[resourceName],
-      searchModulePath: 'searchIndex', // or ['searchIndex']
-    }),
-    vuexSearch({
-      resourceIndexes: {
-        contacts: ['address', 'name'],
-      },
-      resourceGetter: (resourceName, store) => store.resources[resourceName],
+      name: 'searchIndex',
     }),
   ],
 });

@@ -13,16 +13,13 @@
         </contact-detail>
       </template>
     </virtual-scroller>
+    {{ contactsIndex.text }}
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex';
-import { searchActionTypes } from 'vuex-search';
+import { mapGetters, mapActions } from 'vuex';
 import ContactDetail from '@/components/ContactDetail';
-
-const RESOURCE_NAME = 'contacts';
-const SEARCH_MODULE_PATH = 'searchIndex';
 
 export default {
   components: {
@@ -33,6 +30,11 @@ export default {
       searchText: '',
     };
   },
+  vuexsearch: [{
+    name: 'searchIndex',
+    states: { contactsIndex: 'contacts' },
+    actions: { contactsActions: 'contacts' },
+  }],
   computed: {
     ...mapGetters({
       itemsMap: 'currentContacts',
@@ -40,23 +42,16 @@ export default {
     items() {
       return Object.values(this.itemsMap);
     },
-    ...mapState({
-      resultIds: state => state[SEARCH_MODULE_PATH][RESOURCE_NAME].result,
-    }),
     results() {
-      return this.resultIds.map(id => this.itemsMap[id]);
+      return this.contactsIndex.result.map(id => this.itemsMap[id]);
     },
   },
   methods: {
     ...mapActions({
       fetchItems: 'fetchContacts',
-      search: `${SEARCH_MODULE_PATH}/${searchActionTypes.SEARCH}`,
     }),
     searchChange() {
-      this.search({
-        resourceName: RESOURCE_NAME,
-        searchString: this.searchText,
-      });
+      this.contactsActions.search(this.searchText);
     },
   },
 };

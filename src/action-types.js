@@ -6,3 +6,7 @@ export const searchApi = {
   DEFINE_INDEX: '@@vuexSearch/action/API/DEFINE_INDEX',
   PERFORM_SEARCH: '@@vuexSearch/action/API/PERFORM_SEARCH',
 };
+
+export const apiActions = {
+  search: SEARCH,
+};

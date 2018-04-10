@@ -37,3 +37,25 @@ export default function actionsWithSearch(search) {
     },
   };
 }
+
+export function composeApiActionsToDispatch(dispatch, namespace, resourceName) {
+  const actions = {};
+
+  Object.entries(actionTypes.apiActions).forEach(([apiActionType, actionType]) => {
+    actions[apiActionType] = (...args) => {
+      const payload = {};
+      switch (actionType) {
+        case actionTypes.SEARCH:
+          payload.resourceName = resourceName;
+          payload.searchString = args[0];
+          break;
+        default:
+          break;
+      }
+
+      dispatch(`${namespace}${actionType}`, payload);
+    };
+  });
+
+  return actions;
+}
